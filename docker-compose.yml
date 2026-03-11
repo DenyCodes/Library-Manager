@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # PHP/Laravel Backend
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: library_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    networks:
+      - library_network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: library_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - library_network
+    depends_on:
+      - app
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: library_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: library_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: library_user
+      MYSQL_PASSWORD: library_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - library_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: library_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - library_network
+
+networks:
+  library_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
