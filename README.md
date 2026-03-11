@@ -40,7 +40,7 @@ Ou manualmente:
 
 ```bash
 # 1. Copiar o .env do backend
-cp backend/.env.example backend/.env
+cp backend/.env
 
 # 2. Subir os containers
 docker-compose up -d --build

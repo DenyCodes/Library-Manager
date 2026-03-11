@@ -36,7 +36,7 @@ COPY config/database.php  config/database.php
 COPY config/auth.php      config/auth.php
 
 # Copy .env
-COPY .env.example .env
+COPY .env /var/www/.env
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www \
