@@ -6,7 +6,7 @@ echo "🚀 Iniciando Library Manager..."
 # Copy .env if not exists
 if [ ! -f backend/.env ]; then
     echo "📄 Criando arquivo .env do backend..."
-    cp backend/.env.example backend/.env
+    cp backend/.env
 fi
 
 # Start Docker containers
