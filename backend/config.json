@@ -1,0 +1,7 @@
+{
+  "services": {
+    "Library-Manager": {
+      "rootDirectory": "backend"
+    }
+  }
+}
