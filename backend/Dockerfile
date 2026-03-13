@@ -14,7 +14,7 @@ RUN composer create-project laravel/laravel:^12.0 laravel-app --no-interaction -
     && rm -rf laravel-app
 
 WORKDIR /var/www
-
+RUN rm -f .env
 COPY app/Actions/          app/Actions/
 COPY app/Http/Controllers/ app/Http/Controllers/
 COPY app/Models/           app/Models/
@@ -38,4 +38,4 @@ RUN chown -R www-data:www-data /var/www \
 
 EXPOSE 8080
 
-CMD php artisan key:generate --force && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+CMD php artisan config:clear && php artisan key:generate --force && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
