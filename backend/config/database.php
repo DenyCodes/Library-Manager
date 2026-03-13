@@ -1,32 +1,32 @@
 <?php
 
+$host = getenv('DB_HOST') ?: 'mysql.railway.internal';
+$port = getenv('DB_PORT') ?: '3306';
+$database = getenv('DB_DATABASE') ?: 'railway';
+$username = getenv('DB_USERNAME') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: '';
+
 return [
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => 'mysql',
 
     'connections' => [
         'mysql' => [
-            'driver'         => 'mysql',
-            'url'            => env('DB_URL'),
-            'host'           => env('DB_HOST', '127.0.0.1'),
-            'port'           => env('DB_PORT', '3306'),
-            'database'       => env('DB_DATABASE', 'library_db'),
-            'username'       => env('DB_USERNAME', 'library_user'),
-            'password'       => env('DB_PASSWORD', ''),
-            'unix_socket'    => env('DB_SOCKET', ''),
-            'charset'        => env('DB_CHARSET', 'utf8mb4'),
-            'collation'      => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-            'prefix'         => '',
-            'prefix_indexes' => true,
-            'strict'         => true,
-            'engine'         => null,
-            'options'        => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            'driver'      => 'mysql',
+            'host'        => $host,
+            'port'        => $port,
+            'database'    => $database,
+            'username'    => $username,
+            'password'    => $password,
+            'charset'     => 'utf8mb4',
+            'collation'   => 'utf8mb4_unicode_ci',
+            'prefix'      => '',
+            'strict'      => true,
+            'engine'      => null,
         ],
     ],
 
     'migrations' => [
-        'table'  => 'migrations',
+        'table' => 'migrations',
         'update_date_on_publish' => true,
     ],
 ];
